@@ -11,11 +11,21 @@ import "quill/dist/quill.snow.css"
 import { useCallback } from 'react';
 
 
-// // 45. adding more features for our editor toolbar from quill
-// // 46. creating an array which have some more arrays inside of it with some different sections
-// const toolbarFeatures = [
-//     [{header: }]
-// ]
+// 45. adding more features for our editor toolbar from quill
+// 46. creating an array which have some more arrays inside of it with their own section.
+// 47. the blank brackets will auto populated as we are already using a quill theme.
+// 48. it's all from quill documentations and we can add more from that source.
+const toolbarFeatures = [
+    [{header: [1, 2, 3, 4, 5, 6, false]}],
+    [{ font: [] }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["bold", "italic", "underline"],
+    [{color: [] }, { background: [] }],
+    [{ script: "sub" }, { script: "super" }],
+    [{ align: [] }],
+    ["image", "blockquote", "code-block"],
+    ["clean"],
+]
 
 export default function Editor() {
     // 17. define useRef wrapper
@@ -59,7 +69,9 @@ export default function Editor() {
         // 11. and added a theme from the quill css
         // 21. passing the const editor to new Quill instead of the id=container
         // new Quill('#container', {theme: 'snow'})
-        new Quill(editor, {theme: 'snow'})
+        // 49. now we have a modules property and inside od it there is a toolbar property by quill.
+        // 50: so we have set the toolbar property with our toolbar features
+        new Quill(editor, {theme: 'snow', modules: {toolbar: toolbarFeatures}})
 
         // 38. but in useCallback, we don't have a return style cleanup.
         // 41. so removing this return cleanup. And now it runs great!
