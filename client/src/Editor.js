@@ -6,7 +6,16 @@ import "quill/dist/quill.snow.css"
 // 12. also importing useEffect
 // 18. import useRef also
 // 31. importing useCallback
-import { useEffect, useRef, useCallback } from 'react';
+// 44. we can get rid of useEffect & useRef as we are not using them anymore
+// import { useEffect, useRef, useCallback } from 'react';
+import { useCallback } from 'react';
+
+
+// // 45. adding more features for our editor toolbar from quill
+// // 46. creating an array which have some more arrays inside of it with some different sections
+// const toolbarFeatures = [
+//     [{header: }]
+// ]
 
 export default function Editor() {
     // 17. define useRef wrapper
@@ -67,7 +76,8 @@ export default function Editor() {
     // 15. What we can do is to put our editor inside this id=container
     // 16. uesRef is another react hook. It keeps a counts how many times we've re-render a resource.
     // 35. as soon as this element rendered on the page, it will call our callback function and pass that element to our callback function. 
-  return <div id="container" ref={wrapper}>
+    // 43. changing this id to class as we've create a .css for it in between
+  return <div class="container" ref={wrapper}>
       This is the text editor
   </div>;
 }
