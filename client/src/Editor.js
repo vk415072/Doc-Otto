@@ -8,7 +8,11 @@ import "quill/dist/quill.snow.css"
 // 31. importing useCallback
 // 44. we can get rid of useEffect & useRef as we are not using them anymore
 // import { useEffect, useRef, useCallback } from 'react';
-import { useCallback } from 'react';
+// 79. importing useEffects also
+import { useCallback, useEffect } from 'react';
+// 75. importing socket.io-client
+import {io} from 'socket.io-client'
+// 76. now we can make the connection.
 
 
 // 45. adding more features for our editor toolbar from quill
@@ -16,6 +20,7 @@ import { useCallback } from 'react';
 // 47. the blank brackets will auto populated as we are already using a quill theme.
 // 48. it's all from quill documentations and we can add more from that source.
 const toolbarFeatures = [
+
     [{header: [1, 2, 3, 4, 5, 6, false]}],
     [{ font: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
@@ -28,6 +33,20 @@ const toolbarFeatures = [
 ]
 
 export default function Editor() {
+    // 78. make sure we do this connection in s useEffect as we have to do this only once.
+    useEffect(() => {
+        // 79. in this useEffect we wanna call io with the URL we are connecting to.
+        // 80. now this will return us a socket
+        const socket = io("http://localhost:3001")
+
+        // 81. also making sure to clean this up
+        return () =>{
+            // 82. so when we are done, we are disconnecting with the server.
+            socket.disconnect();
+        }
+    }, [])
+
+
     // 17. define useRef wrapper
     // 34. removing useRef now.
     // const wrapper = useRef()
