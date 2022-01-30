@@ -9,7 +9,8 @@ import "quill/dist/quill.snow.css"
 // 44. we can get rid of useEffect & useRef as we are not using them anymore
 // import { useEffect, useRef, useCallback } from 'react';
 // 79. importing useEffects also
-import { useCallback, useEffect } from 'react';
+// 84. also importing useState
+import { useCallback, useEffect, useState } from 'react';
 // 75. importing socket.io-client
 import {io} from 'socket.io-client'
 // 76. now we can make the connection.
@@ -33,16 +34,25 @@ const toolbarFeatures = [
 ]
 
 export default function Editor() {
+    // 83. to make sure we can access our socket from everywhere, putting it into useState
+    const [socket, setSocket] = useState
+    // 85. doing the same thing for our quill instance
+    const [quill, setQuill] = useState
     // 78. make sure we do this connection in s useEffect as we have to do this only once.
+    // 89. this useEffect is creating a socket for us and disconnecting it when we no longer needed. 
     useEffect(() => {
         // 79. in this useEffect we wanna call io with the URL we are connecting to.
         // 80. now this will return us a socket
-        const socket = io("http://localhost:3001")
+        // 86. changing the variable so it doesn't overlap
+        const s = io("http://localhost:3001")
+        // 87. setting socket
+        setSocket(s)
 
         // 81. also making sure to clean this up
         return () =>{
             // 82. so when we are done, we are disconnecting with the server.
-            socket.disconnect();
+            // 88. also updating the variable name here
+            s.disconnect();
         }
     }, [])
 
@@ -90,8 +100,9 @@ export default function Editor() {
         // new Quill('#container', {theme: 'snow'})
         // 49. now we have a modules property and inside od it there is a toolbar property by quill.
         // 50: so we have set the toolbar property with our toolbar features
-        new Quill(editor, {theme: 'snow', modules: {toolbar: toolbarFeatures}})
-
+        const q = new Quill(editor, {theme: 'snow', modules: {toolbar: toolbarFeatures}})
+        // 90. doing the same thing with quill
+        setQuill(q)
         // 38. but in useCallback, we don't have a return style cleanup.
         // 41. so removing this return cleanup. And now it runs great!
         // 26. hence, now we can clean everything inside our main div i.e, id=container every time useEffect runs.
