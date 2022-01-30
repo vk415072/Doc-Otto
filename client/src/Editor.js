@@ -35,9 +35,9 @@ const toolbarFeatures = [
 
 export default function Editor() {
     // 83. to make sure we can access our socket from everywhere, putting it into useState
-    const [socket, setSocket] = useState
+    const [socket, setSocket] = useState()
     // 85. doing the same thing for our quill instance
-    const [quill, setQuill] = useState
+    const [quill, setQuill] = useState()
     // 78. make sure we do this connection in s useEffect as we have to do this only once.
     // 89. this useEffect is creating a socket for us and disconnecting it when we no longer needed. 
     useEffect(() => {
@@ -55,6 +55,40 @@ export default function Editor() {
             s.disconnect();
         }
     }, [])
+
+    // 91. now we have access to socket and quill variable
+    // 92. creating a useEffect, this will detect any changes whenever quill changes
+    useEffect(() => {
+        // 105. when we first run this code, quill and socket would be undefined, so making sure
+        if (socket == null || quill  == null) return
+
+        // 101. so we have to separate the function and create a variable of it.
+        const handler = (delta, oldDelta, source) => {
+            if (source !== 'user') return
+            socket.emit('send-changes', delta)
+        }
+        // 102. again doing the same as before
+        quill.on('text-change', handler)
+
+        // 93. from the docs of quill's API Event list (Text change event)
+        // quill.on('text-change', (delta, oldDelta, source) => {
+        //     // 94. source determines if user made these changes or code library made these changes.
+        //     // 95. So, making sure if only user made these change.
+        //     if (source !== 'user') return
+        //     // 96. now emitting a message from client to server and passing the delta that we need.
+        //     // 97. delta is just the thing we are changing. It's not the whole document
+        //     socket.emit('send-changes', delta)
+        // })
+
+        // 98. removing this event listener when we no longer needed
+        return() => {
+            // 99. also passing the function we want to remove.
+            // 100. in our case, the same function that we passed in quill.on
+            // 103. also passing that function here now
+            quill.off('text-change', handler)
+        }
+        // 104. and this relies on our socket and quill both.
+    }, [socket, quill])
 
 
     // 17. define useRef wrapper
