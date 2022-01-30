@@ -56,6 +56,23 @@ export default function Editor() {
         }
     }, [])
 
+    // 110. creating another but similar useEffect to listen to changes from server via quill
+    // 111. and our handler here is for receiving the event
+    // 113. so now this is only updating the document changes that are passed by other client.
+    useEffect(() => {
+        if (socket == null || quill  == null) return
+        const handler = (delta) => {
+            quill.updateContents(delta)
+        }
+        // 112. so instead of doing this with quill, we will do with socket.
+        socket.on('receive-changes', handler)
+
+        return() => {
+            socket.off('receive-changes', handler)
+        }
+    }, [socket, quill])
+    
+
     // 91. now we have access to socket and quill variable
     // 92. creating a useEffect, this will detect any changes whenever quill changes
     useEffect(() => {

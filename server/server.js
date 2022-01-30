@@ -16,6 +16,15 @@ const io = require('socket.io')(3001, {
 // 60. every time our client connects, it's going to run this io connection.
 // 70. and it will give us this socket
 io.on('connection', socket => {
+    // 106. listening to the changes/delta by quill from client
+    socket.on('send-changes', delta => {
+        // 107. this will log all the changes bought by the delta from quill sent to us with a location also.
+        // console.log(delta)
+        // 108. now actually sending the changes back to other clients and passing the delta in it.
+        // 109. so it is broadcasting the changes to every one else except us on our current socket.
+        socket.broadcast.emit('receive-changes', delta)
+    })
+
     // 71. this io is how we communicate back to our client
     console.log('connected!!!')
 })
